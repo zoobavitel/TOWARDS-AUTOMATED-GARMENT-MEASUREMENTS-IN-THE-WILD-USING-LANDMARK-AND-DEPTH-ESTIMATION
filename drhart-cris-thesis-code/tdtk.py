@@ -164,22 +164,36 @@ def visualize_results(image, keypoints, results):
     print(f"Side Seam Distance: {results['sideseam_distance_meters']:.4f} meters ({results['sideseam_distance_inches']:.2f} inches)")
     print(f"Waistline Distance: {results['waistline_distance_meters']:.4f} meters ({results['waistline_distance_inches']:.2f} inches)")
 
-import argparse
-
 def main():
-    parser = argparse.ArgumentParser(description='Process garment images to calculate measurements using true depth and true keypoints.')
-    parser.add_argument('--anno_dirs', nargs='+', required=True, help='List of directories containing annotations.')
-    parser.add_argument('--image_dirs', nargs='+', required=True, help='List of directories containing images.')
-    parser.add_argument('--depth_dirs', nargs='+', required=True, help='List of directories containing depth maps.')
-    args = parser.parse_args()
+    # Directories for Cris-run
+    anno_dirs_cris = [r"C:\Users\crisz\Desktop\Prod-Thesis\DrHart&CrisData\cris-run\lidar\run1\annos"]
+    image_dirs_cris = [r"C:\Users\crisz\Desktop\Prod-Thesis\DrHart&CrisData\cris-run\lidar\run1\image"]
+    depth_dirs_cris = [r"C:\Users\crisz\Desktop\Prod-Thesis\DrHart&CrisData\cris-run\lidar\run1\depth"]
 
-    # Load dataset
-    dataset = DrHartCrisDataset(args.anno_dirs, args.image_dirs, args.depth_dirs)
-    print("Processing...")
-    for i in range(len(dataset)):
-        sample = dataset[i]
-        results = process_sample(sample)
-        visualize_results(sample['image'], sample['keypoints'], results)
+    # Directories for David-run
+    anno_dirs_david = [r"C:\Users\crisz\Desktop\Prod-Thesis\DrHart&CrisData\david-run\lidar\run1\annos"]
+    image_dirs_david = [r"C:\Users\crisz\Desktop\Prod-Thesis\DrHart&CrisData\david-run\lidar\run1\image"]
+    depth_dirs_david = [r"C:\Users\crisz\Desktop\Prod-Thesis\DrHart&CrisData\david-run\lidar\run1\depth"]
+
+    # Load datasets for Cris-run and David-run
+    dataset_cris = DrHartCrisDataset(anno_dirs_cris, image_dirs_cris, depth_dirs_cris)
+    print("Processing Cris-run...")
+    for i in range(len(dataset_cris)):
+        sample_cris = dataset_cris[i]
+        results_cris = process_sample(sample_cris)
+        visualize_results(sample_cris['image'], sample_cris['keypoints'], results_cris)
+        user_input = input("Press Enter to continue to the next sample, or 'q' to quit: ")
+        if user_input.lower() == 'q':
+            break
+
+    # Load and process David-run
+    dataset_david = DrHartCrisDataset(anno_dirs_david, image_dirs_david, depth_dirs_david)
+    print("Processing David-run...")
+    for i in range(len(dataset_david)):
+        sample_david = dataset_david[i]
+        results_david = process_sample(sample_david)
+        visualize_results(sample_david['image'], sample_david['keypoints'], results_david)
+        
         user_input = input("Press Enter to continue to the next sample, or 'q' to quit: ")
         if user_input.lower() == 'q':
             break
