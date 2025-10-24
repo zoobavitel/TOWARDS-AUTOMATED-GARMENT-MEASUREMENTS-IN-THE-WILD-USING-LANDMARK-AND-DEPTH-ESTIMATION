@@ -408,42 +408,4 @@ def visualize_results(image, keypoints, results):
     for i, kp in enumerate(real_space_keypoints):
         print(f"Keypoint {i}: {kp[2]:.4f} meters")
 
-def main():
-    image_dirs = [
-        r"C:\Users\crisz\Desktop\Prod-Thesis\DrHart&CrisData\cris-run\lidar\run1\image",
-        r"C:\Users\crisz\Desktop\Prod-Thesis\DrHart&CrisData\david-run\lidar\run1\image"
-    ]
-    depth_model_path = r"C:\Users\crisz\Desktop\Prod-Thesis\Production\checkpoints\depth_anything_v2_metric_hypersim_vitl.pth"
-    keypoint_model_path = r"C:\Users\crisz\Desktop\Prod-Thesis\Production\checkpoints\deepfashion2_model.pth"
-
-    # Check that all directories exist
-    for dir_path in image_dirs:
-        if not os.path.exists(dir_path):
-            logger.error(f"Directory does not exist: {dir_path}")
-            return
-
-    dataset = DrHartCrisDataset(image_dirs)
-    if len(dataset) == 0:
-        logger.error("No data found. Please check your image directories.")
-        return
-
-    # Load models
-    depth_model = load_depth_model(depth_model_path)
-    keypoint_model = load_keypoint_model(keypoint_model_path)
-    segmentation_model, seg_device = load_segmentation_model()
-
-    logger.info("Processing samples...")
-    for idx in range(len(dataset)):
-        sample = dataset[idx]
-        results = process_sample(depth_model, keypoint_model, segmentation_model, seg_device, sample)
-        
-        if results is not None:
-            visualize_results(sample['image'], results['predicted_keypoints'], results)
-
-        user_input = input("Press Enter to continue to the next sample, or 'q' to quit: ")
-        if user_input.lower() == 'q':
-            logger.info("Process terminated by user.")
-            break
-
-if __name__ == "__main__":
-    main()
+# end of pdpk.py content
