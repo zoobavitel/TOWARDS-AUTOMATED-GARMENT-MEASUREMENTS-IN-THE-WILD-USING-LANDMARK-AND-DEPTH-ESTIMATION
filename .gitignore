@@ -9,3 +9,5 @@ predicteddepthtruekeypoints-deepfashion2-output.csv
 Sideseam_Metrics (1).csv
 Waistline_Metrics.csv
 waistline_sideseam_measurements.csv
+GarmentMeasurementDataset (2)/
+processing.log
